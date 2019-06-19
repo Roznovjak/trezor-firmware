@@ -10,6 +10,7 @@ CORE_PROTOBUF_SOURCES="\
     $PROTOB/messages-common.proto \
     $PROTOB/messages-crypto.proto \
     $PROTOB/messages-debug.proto \
+    $PROTOB/messages-decent.proto \
     $PROTOB/messages-eos.proto \
     $PROTOB/messages-ethereum.proto \
     $PROTOB/messages-lisk.proto \

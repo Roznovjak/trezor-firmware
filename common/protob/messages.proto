@@ -246,6 +246,14 @@ enum MessageType {
     MessageType_EosTxActionAck = 604 [(wire_in) = true];
     MessageType_EosSignedTx = 605 [(wire_out) = true];
 
+    // DECENT
+    MessageType_DecentGetPublicKey = 650 [(wire_in) = true];
+    MessageType_DecentPublicKey = 651 [(wire_out) = true];
+    MessageType_DecentSignTx = 652 [(wire_in) = true];
+    MessageType_DecentTxOperationRequest = 653 [(wire_out) = true];
+    MessageType_DecentTxOperationAck = 654 [(wire_in) = true];
+    MessageType_DecentSignedTx = 655 [(wire_out) = true];
+
     // Binance
     MessageType_BinanceGetAddress = 700 [(wire_in) = true];
     MessageType_BinanceAddress = 701 [(wire_out) = true];
