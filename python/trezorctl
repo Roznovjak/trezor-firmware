@@ -36,6 +36,7 @@ from trezorlib import (
     coins,
     cosi,
     debuglink,
+    decent,
     device,
     eos,
     ethereum,
@@ -1456,6 +1457,48 @@ def eos_sign_transaction(connect, address, file):
 
     address_n = tools.parse_path(address)
     return eos.sign_tx(client, address_n, tx_json["transaction"], tx_json["chain_id"])
+
+
+#
+# DECENT functions
+#
+
+
+@cli.command(help="Get DECENT public key in base58 encoding.")
+@click.option(
+    "-n", "--address", required=True, help="BIP-32 path, e.g. m/44'/343'/0'/0/0"
+)
+@click.option("-d", "--show-display", is_flag=True)
+@click.pass_obj
+def decent_get_public_key(connect, address, show_display):
+    client = connect()
+    address_n = tools.parse_path(address)
+    res = decent.get_public_key(client, address_n, show_display)
+    return "WIF: {}\nRaw: {}".format(res.wif_public_key, res.raw_public_key.hex())
+
+
+@cli.command(help="Sign DECENT transaction. ")
+@click.option(
+    "-n",
+    "--address",
+    required=True,
+    help="BIP-32 path to source address, e.g., m/44'/343'/0'/0/0",
+)
+@click.option(
+    "-f",
+    "--file",
+    type=click.File("r"),
+    required=True,
+    help="Transaction in JSON format",
+)
+@click.pass_obj
+def decent_sign_transaction(connect, address, file):
+    client = connect()
+
+    tx_json = json.load(file)
+
+    address_n = tools.parse_path(address)
+    return decent.sign_tx(client, address_n, tx_json["transaction"], tx_json["chain_id"])
 
 
 #

@@ -28,6 +28,8 @@ Use the following command to see all options:
     clear-session                   Clear session (remove cached PIN, passphrase, etc.).
     cosi-commit                     Ask device to commit to CoSi signing.
     cosi-sign                       Ask device to sign using CoSi.
+    decent-get-public-key           Get DECENT public key in base58 encoding.
+    decent-sign-tx                  Sign DECENT transaction.
     decrypt-keyvalue                Decrypt value by given key and path.
     disable-passphrase              Disable passphrase.
     enable-passphrase               Enable passphrase.

@@ -32,7 +32,7 @@ message DecentPublicKey {
  * @next Failure
  */
 message DecentSignTx {
-    repeated uint32 address_n = 1;      // BIP-32 path to derive the key from master node 44'/194'/0'
+    repeated uint32 address_n = 1;      // BIP-32 path to derive the key from master node 44'/343'/0'
     optional bytes chain_id = 2;        // 256-bit long chain id
     optional DecentTxHeader header = 3; // DECENT transaction header
     optional uint32 num_operations = 4; // number of operations
