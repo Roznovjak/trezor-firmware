@@ -9,279 +9,135 @@ UPDATE_ACCOUNT_OP_ID = 2
 TRANSFER_OP_ID = 39
 
 
-# def name_to_number(name):
-#     length = len(name)
-#     value = 0
-#
-#     for i in range(0, 13):
-#         c = 0
-#         if i < length and i < 13:
-#             c = char_to_symbol(name[i])
-#
-#         if i < 12:
-#             c &= 0x1F
-#             c <<= 64 - 5 * (i + 1)
-#         else:
-#             c &= 0x0F
-#
-#         value |= c
-#
-#     return value
-#
-#
-# def char_to_symbol(c):
-#     if c >= "a" and c <= "z":
-#         return ord(c) - ord("a") + 6
-#     elif c >= "1" and c <= "5":
-#         return ord(c) - ord("1") + 1
-#     else:
-#         return 0
-#
-#
-# def parse_asset(asset):
-#     amount_str, symbol_str = asset.split(" ")
-#
-#     # "-1.0000" => ["-1", "0000"] => -10000
-#     amount_parts = amount_str.split(".", maxsplit=1)
-#     amount = int("".join(amount_parts))
-#
-#     precision = 0
-#     if len(amount_parts) > 1:
-#         precision = len(amount_parts[1])
-#
-#         # 4, "EOS" => b"\x04EOS" => little-endian uint32
-#     symbol_bytes = bytes([precision]) + symbol_str.encode()
-#     symbol = int.from_bytes(symbol_bytes, "little")
-#
-#     return messages.EosAsset(amount=amount, symbol=symbol)
-#
-#
-# def public_key_to_buffer(pub_key):
-#     _t = 0
-#     if pub_key[:3] == "EOS":
-#         pub_key = pub_key[3:]
-#         _t = 0
-#     elif pub_key[:7] == "PUB_K1_":
-#         pub_key = pub_key[7:]
-#         _t = 0
-#     elif pub_key[:7] == "PUB_R1_":
-#         pub_key = pub_key[7:]
-#         _t = 1
-#
-#     return _t, b58decode(pub_key, None)[:-4]
-#
-#
-# def parse_common(action):
-#     authorization = []
-#     for auth in action["authorization"]:
-#         authorization.append(
-#             messages.EosPermissionLevel(
-#                 actor=name_to_number(auth["actor"]),
-#                 permission=name_to_number(auth["permission"]),
-#             )
-#         )
-#
-#     return messages.EosActionCommon(
-#         account=name_to_number(action["account"]),
-#         name=name_to_number(action["name"]),
-#         authorization=authorization,
-#     )
-#
-#
-# def parse_transfer(data):
-#     return messages.EosActionTransfer(
-#         sender=name_to_number(data["from"]),
-#         receiver=name_to_number(data["to"]),
-#         memo=data["memo"],
-#         quantity=parse_asset(data["quantity"]),
-#     )
-#
-#
-# def parse_vote_producer(data):
-#     producers = []
-#     for producer in data["producers"]:
-#         producers.append(name_to_number(producer))
-#
-#     return messages.EosActionVoteProducer(
-#         voter=name_to_number(data["account"]),
-#         proxy=name_to_number(data["proxy"]),
-#         producers=producers,
-#     )
-#
-#
-# def parse_buy_ram(data):
-#     return messages.EosActionBuyRam(
-#         payer=name_to_number(data["payer"]),
-#         receiver=name_to_number(data["receiver"]),
-#         quantity=parse_asset(data["quant"]),
-#     )
-#
-#
-# def parse_buy_rambytes(data):
-#     return messages.EosActionBuyRamBytes(
-#         payer=name_to_number(data["payer"]),
-#         receiver=name_to_number(data["receiver"]),
-#         bytes=int(data["bytes"]),
-#     )
-#
-#
-# def parse_sell_ram(data):
-#     return messages.EosActionSellRam(
-#         account=name_to_number(data["account"]), bytes=int(data["bytes"])
-#     )
-#
-#
-# def parse_delegate(data):
-#     return messages.EosActionDelegate(
-#         sender=name_to_number(data["sender"]),
-#         receiver=name_to_number(data["receiver"]),
-#         net_quantity=parse_asset(data["stake_net_quantity"]),
-#         cpu_quantity=parse_asset(data["stake_cpu_quantity"]),
-#         transfer=bool(data["transfer"]),
-#     )
-#
-#
-# def parse_undelegate(data):
-#     return messages.EosActionUndelegate(
-#         sender=name_to_number(data["sender"]),
-#         receiver=name_to_number(data["receiver"]),
-#         net_quantity=parse_asset(data["unstake_net_quantity"]),
-#         cpu_quantity=parse_asset(data["unstake_cpu_quantity"]),
-#     )
-#
-#
-# def parse_refund(data):
-#     return messages.EosActionRefund(owner=name_to_number(data["owner"]))
-#
-#
-# def parse_updateauth(data):
-#     auth = parse_authorization(data["auth"])
-#
-#     return messages.EosActionUpdateAuth(
-#         account=name_to_number(data["account"]),
-#         permission=name_to_number(data["permission"]),
-#         parent=name_to_number(data["parent"]),
-#         auth=auth,
-#     )
-#
-#
-# def parse_deleteauth(data):
-#     return messages.EosActionDeleteAuth(
-#         account=name_to_number(data["account"]),
-#         permission=name_to_number(data["permission"]),
-#     )
-#
-#
-# def parse_linkauth(data):
-#     return messages.EosActionLinkAuth(
-#         account=name_to_number(data["account"]),
-#         code=name_to_number(data["code"]),
-#         type=name_to_number(data["type"]),
-#         requirement=name_to_number(data["requirement"]),
-#     )
-#
-#
-# def parse_unlinkauth(data):
-#     return messages.EosActionUnlinkAuth(
-#         account=name_to_number(data["account"]),
-#         code=name_to_number(data["code"]),
-#         type=name_to_number(data["type"]),
-#     )
-#
-#
-# def parse_authorization(data):
-#     keys = []
-#     for key in data["keys"]:
-#         _t, _k = public_key_to_buffer(key["key"])
-#
-#         keys.append(
-#             messages.EosAuthorizationKey(type=_t, key=_k, weight=int(key["weight"]))
-#         )
-#
-#     accounts = []
-#     for account in data["accounts"]:
-#         accounts.append(
-#             messages.EosAuthorizationAccount(
-#                 account=messages.EosPermissionLevel(
-#                     actor=name_to_number(account["permission"]["actor"]),
-#                     permission=name_to_number(account["permission"]["permission"]),
-#                 ),
-#                 weight=int(account["weight"]),
-#             )
-#         )
-#
-#     waits = []
-#     for wait in data["waits"]:
-#         waits.append(
-#             messages.EosAuthorizationWait(
-#                 wait_sec=int(wait["wait_sec"]), weight=int(wait["weight"])
-#             )
-#         )
-#
-#     return messages.EosAuthorization(
-#         threshold=int(data["threshold"]), keys=keys, accounts=accounts, waits=waits
-#     )
-#
-#
-# def parse_new_account(data):
-#     owner = parse_authorization(data["owner"])
-#     active = parse_authorization(data["active"])
-#
-#     return messages.EosActionNewAccount(
-#         creator=name_to_number(data["creator"]),
-#         name=name_to_number(data["name"]),
-#         owner=owner,
-#         active=active,
-#     )
-#
-#
-# def parse_unknown(data):
-#     data_bytes = bytes.fromhex(data)
-#     return messages.EosActionUnknown(data_size=len(data_bytes), data_chunk=data_bytes)
+def parse_id(object_num: str):
+    split = object_num.split(".", maxsplit=2)
+    return int(split[2])
+
+
+def parse_object_id(object_num: str):
+    object_space, object_type, object_id = object_num.split(".", maxsplit=2)
+    result = (int(object_space) << 56) | (int(object_type) << 48) | int(object_id)
+    return messages.DecentObjectId(result)
+
+
+def parse_asset(asset):
+    return messages.DecentAsset(amount=int(asset["amount"]), asset_id=parse_id(asset["asset_id"]))
+
+
+def public_key_to_buffer(pub_key):
+    return b58decode(pub_key[3:], None)[:-4]
+
+
+def parse_transfer(data):
+    fee = parse_asset(data["fee"])
+    sender = messages.DecentAccountId(parse_id(data["from"]))
+    receiver = parse_object_id(data["to"])
+    amount = parse_asset(data["amount"])
+
+    memo = None
+    memo_data = data.get("memo")
+    if memo_data:
+        memo_from = public_key_to_buffer(memo_data["from"])
+        memo_to = public_key_to_buffer(memo_data["to"])
+        memo_nonce = int(memo_data["nonce"])
+        memo_msg = bytes.fromhex(memo_data["message"])
+        memo = messages.DecentMemo(memo_from, memo_to, memo_nonce, memo_msg)
+
+    return messages.DecentOperationTransfer(fee, sender, receiver, amount, memo)
+
+
+def parse_authority(data):
+    accounts = []
+    for item in data["account_auths"]:
+        account, weight = item
+        accounts.append(
+            messages.DecentAuthorityAccount(
+                account=messages.DecentAccountId(parse_id(account)),
+                weight=int(weight)
+            )
+        )
+
+    keys = []
+    for item in data["key_auths"]:
+        key, weight = item
+        keys.append(
+            messages.DecentAuthorityKey(
+                key=public_key_to_buffer(key),
+                weight=int(weight)
+            )
+        )
+
+    return messages.DecentAuthority(threshold=int(data["weight_threshold"]), accounts=accounts, keys=keys)
+
+
+def parse_vote(vote: str):
+    vote_type, vote_instance = vote.split(":")
+    return int(vote_instance) << 8 | int(vote_type)
+
+
+def parse_account_options(data):
+    memo = public_key_to_buffer(data["memo_key"])
+    voting_account = messages.DecentAccountId(parse_id(data["voting_account"]))
+    num_miner = int(data["num_miner"])
+    votes = []
+    for vote in data["votes"]:
+        votes.append(parse_vote(vote))
+    allow_subscription = data["allow_subscription"]
+    price_per_subscribe = parse_asset(data["price_per_subscribe"])
+    subscription_period = int(data["subscription_period"])
+
+    return messages.DecentAccountOptions(memo,
+                                         voting_account,
+                                         num_miner,
+                                         votes,
+                                         allow_subscription,
+                                         price_per_subscribe,
+                                         subscription_period)
+
+
+def parse_account_create(data):
+    fee = parse_asset(data["fee"])
+    registrar = messages.DecentAccountId(parse_id(data["registrar"]))
+    name = data["name"]
+    owner = parse_authority(data["owner"])
+    active = parse_authority(data["active"])
+    options = parse_account_options(data["options"])
+
+    return messages.DecentOperationAccountCreate(fee, registrar, name, owner, active, options)
+
+
+def parse_account_update(data):
+    fee = parse_asset(data["fee"])
+    account = messages.DecentAccountId(parse_id(data["account"]))
+    owner = None
+    if data.get("owner"):
+        owner = parse_authority(data["owner"])
+
+    active = None
+    if data.get("active"):
+        active = parse_authority(data["active"])
+
+    new_options = None
+    if data.get("new_options"):
+        new_options = parse_account_options(data["new_options"])
+
+    return messages.DecentOperationAccountUpdate(fee, account, owner, active, new_options)
 
 
 def parse_operation(operation):
-    tx_operation = messages.DecentTxActionAck()
+    tx_operation = messages.DecentTxOperationAck()
     operation_id, data = operation[:2]
 
-    # if operation["account"] == "eosio":
-    #     if operation["name"] == "voteproducer":
-    #         tx_action.vote_producer = parse_vote_producer(data)
-    #     elif action["name"] == "buyram":
-    #         tx_action.buy_ram = parse_buy_ram(data)
-    #     elif action["name"] == "buyrambytes":
-    #         tx_action.buy_ram_bytes = parse_buy_rambytes(data)
-    #     elif action["name"] == "sellram":
-    #         tx_action.sell_ram = parse_sell_ram(data)
-    #     elif action["name"] == "delegatebw":
-    #         tx_action.delegate = parse_delegate(data)
-    #     elif action["name"] == "undelegatebw":
-    #         tx_action.undelegate = parse_undelegate(data)
-    #     elif action["name"] == "refund":
-    #         tx_action.refund = parse_refund(data)
-    #     elif action["name"] == "updateauth":
-    #         tx_action.update_auth = parse_updateauth(data)
-    #     elif action["name"] == "deleteauth":
-    #         tx_action.delete_auth = parse_deleteauth(data)
-    #     elif action["name"] == "linkauth":
-    #         tx_action.link_auth = parse_linkauth(data)
-    #     elif action["name"] == "unlinkauth":
-    #         tx_action.unlink_auth = parse_unlinkauth(data)
-    #     elif action["name"] == "newaccount":
-    #         tx_action.new_account = parse_new_account(data)
-    # elif action["name"] == "transfer":
-    #     tx_action.transfer = parse_transfer(data)
-    # else:
-    #     tx_action.unknown = parse_unknown(data)
+    tx_operation.operation_id = operation_id
 
     if operation_id == TRANSFER_OP_ID:
-        pass
-    elif operation_id == UPDATE_ACCOUNT_OP_ID:
-        pass
+        tx_operation.transfer = parse_transfer(data)
     elif operation_id == CREATE_ACCOUNT_OP_ID:
-        pass
+        tx_operation.account_create = parse_account_create(data)
+    elif operation_id == UPDATE_ACCOUNT_OP_ID:
+        tx_operation.account_update = parse_account_update(data)
     else:
-        pass
+        raise ValueError("Unsupported operation type: " + str(operation_id))
 
     return tx_operation
 
@@ -306,7 +162,7 @@ def parse_transaction_json(transaction):
 
 
 @expect(messages.DecentPublicKey)
-def get_public_key(client, n, show_display=False, multisig=None):
+def get_public_key(client, n, show_display=False):
     response = client.call(
         messages.DecentGetPublicKey(address_n=n, show_display=show_display)
     )
@@ -317,25 +173,25 @@ def get_public_key(client, n, show_display=False, multisig=None):
 def sign_tx(client, address, transaction, chain_id):
     header, operations = parse_transaction_json(transaction)
 
-    msg = messages.EosSignTx()
+    msg = messages.DecentSignTx()
     msg.address_n = address
     msg.chain_id = bytes.fromhex(chain_id)
     msg.header = header
-    msg.num_actions = len(operations)
+    msg.num_operations = len(operations)
 
     response = client.call(msg)
 
-    # try:
-    #     while isinstance(response, messages.EosTxActionRequest):
-    #         response = client.call(actions.pop(0))
-    # except IndexError:
-    #     # pop from empty list
-    #     raise CallException(
-    #         "Eos.UnexpectedEndOfOperations",
-    #         "Reached end of operations without a signature.",
-    #     ) from None
+    try:
+        while isinstance(response, messages.DecentTxOperationRequest):
+            response = client.call(operations.pop(0))
+    except IndexError:
+        # pop from empty list
+        raise CallException(
+            "Decent.UnexpectedEndOfOperations",
+            "Reached end of operations without a signature.",
+        ) from None
 
-    if not isinstance(response, messages.EosSignedTx):
+    if not isinstance(response, messages.DecentSignedTx):
         raise CallException(messages.FailureType.UnexpectedMessage, response)
 
     return response

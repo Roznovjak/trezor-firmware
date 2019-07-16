@@ -2,10 +2,9 @@
 # fmt: off
 import protobuf as p
 
-from .DecentOperationCreateAccount import DecentOperationCreateAccount
+from .DecentOperationAccountCreate import DecentOperationAccountCreate
+from .DecentOperationAccountUpdate import DecentOperationAccountUpdate
 from .DecentOperationTransfer import DecentOperationTransfer
-from .DecentOperationUnknown import DecentOperationUnknown
-from .DecentOperationUpdateAccount import DecentOperationUpdateAccount
 
 
 class DecentTxOperationAck(p.MessageType):
@@ -13,21 +12,21 @@ class DecentTxOperationAck(p.MessageType):
 
     def __init__(
         self,
+        operation_id: int = None,
         transfer: DecentOperationTransfer = None,
-        update_account: DecentOperationUpdateAccount = None,
-        create_account: DecentOperationCreateAccount = None,
-        unknown: DecentOperationUnknown = None,
+        account_update: DecentOperationAccountUpdate = None,
+        account_create: DecentOperationAccountCreate = None,
     ) -> None:
+        self.operation_id = operation_id
         self.transfer = transfer
-        self.update_account = update_account
-        self.create_account = create_account
-        self.unknown = unknown
+        self.account_update = account_update
+        self.account_create = account_create
 
     @classmethod
     def get_fields(cls):
         return {
-            1: ('transfer', DecentOperationTransfer, 0),
-            2: ('update_account', DecentOperationUpdateAccount, 0),
-            3: ('create_account', DecentOperationCreateAccount, 0),
-            4: ('unknown', DecentOperationUnknown, 0),
+            1: ('operation_id', p.UVarintType, 0),
+            2: ('transfer', DecentOperationTransfer, 0),
+            3: ('account_update', DecentOperationAccountUpdate, 0),
+            4: ('account_create', DecentOperationAccountCreate, 0),
         }

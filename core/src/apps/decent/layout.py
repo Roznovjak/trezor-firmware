@@ -15,5 +15,5 @@ async def require_sign_tx(ctx, num_operations):
     text = Text("Sign transaction", ui.ICON_SEND, icon_color=ui.GREEN)
     text.normal("You are about")
     text.normal("to sign {}".format(num_operations))
-    text.normal("action(s).")
+    text.normal("operation(s).")
     return await require_confirm(ctx, text, code=ButtonRequestType.SignTx)

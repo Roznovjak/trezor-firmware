@@ -1,14 +1,33 @@
 from trezor.crypto import base58
+from trezor.messages import DecentObjectId
 
 from apps.common import HARDENED
 
 
-def base58_encode(prefix: str, sig_prefix: str, data: bytes) -> str:
-    b58 = base58.encode(data + base58.ripemd160_32(data + sig_prefix.encode()))
-    if sig_prefix:
-        return prefix + sig_prefix + "_" + b58
-    else:
-        return prefix + b58
+def base58_encode(prefix: str, data: bytes) -> str:
+    b58 = base58.encode(data + base58.ripemd160_32(data))
+    return prefix + b58
+
+
+def account_id_to_string(id) -> str:
+    return "1.2." + str(id)
+
+
+def object_id_to_string(id: DecentObjectId) -> str:
+    object_space = id.id >> 56
+    object_type = id.id >> 48 & 0x00ff
+    object_id = id.id & 0xffffffffffff
+    return ".".join([str(object_space), str(object_type), str(object_id)])
+
+
+def asset_id_to_string(asset_id) -> str:
+    return "1.3." + str(asset_id)
+
+
+def vote_id_to_string(vote_id) -> str:
+    vote_type = vote_id & 0xff
+    vote_instance = vote_id >> 8
+    return str(vote_type) + ":" + str(vote_instance)
 
 
 def validate_full_path(path: list) -> bool:

@@ -5,15 +5,3 @@ import protobuf as p
 
 class DecentTxOperationRequest(p.MessageType):
     MESSAGE_WIRE_TYPE = 653
-
-    def __init__(
-        self,
-        data_size: int = None,
-    ) -> None:
-        self.data_size = data_size
-
-    @classmethod
-    def get_fields(cls):
-        return {
-            1: ('data_size', p.UVarintType, 0),
-        }

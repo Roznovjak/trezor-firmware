@@ -28,7 +28,7 @@ message DecentPublicKey {
 /**
  * Request: Ask device to sign a DECENT transaction
  * @start
- * @next DecentTxRequest
+ * @next DecentTxOperationRequest
  * @next Failure
  */
 message DecentSignTx {
@@ -41,8 +41,8 @@ message DecentSignTx {
      * Structure representing DECENT transaction header
      */
     message DecentTxHeader {
-        optional uint32 ref_block_num = 1;       // 16-bit specifies a block num in the last 2^16 blocks.
-        optional uint32 ref_block_prefix = 2;    // specifies the lower 32 bits of the blockid at get_ref_blocknum
+        optional uint32 ref_block_num = 1;       // 16-bit specifies a block num in the last 2^16 blocks
+        optional uint32 ref_block_prefix = 2;    // specifies the lower 32 bits of the reference block ID
         optional uint32 expiration = 3;          // time at which transaction expires
     }
 }
@@ -51,9 +51,7 @@ message DecentSignTx {
  * Response: Device asks to upload next operation
  * @next DecentTxOperationAck
  */
-message DecentTxOperationRequest {
-    optional uint32 data_size = 1;
-}
+message DecentTxOperationRequest {}
 
 /**
  * Request: Next operation data that needs to be uploaded
@@ -62,20 +60,20 @@ message DecentTxOperationRequest {
  * @next Failure
  */
 message DecentTxOperationAck {
-    optional DecentOperationTransfer transfer = 1;
-    optional DecentOperationUpdateAccount update_account = 2;
-    optional DecentOperationCreateAccount create_account = 3;
-    optional DecentOperationUnknown unknown = 4;
+    optional uint32 operation_id = 1;
+    optional DecentOperationTransfer transfer = 2;
+    optional DecentOperationAccountUpdate account_update = 3;
+    optional DecentOperationAccountCreate account_create = 4;
 
     /**
-     * Structure representing object id type
+     * Structure representing general object_id type
      */
     message DecentObjectId {
         optional uint64 id = 1;
     }
 
     /**
-     * Structure representing account id type
+     * Structure representing account_id type
      */
     message DecentAccountId {
         optional uint64 id = 1;
@@ -86,11 +84,11 @@ message DecentTxOperationAck {
      */
     message DecentAsset {
         optional sint64 amount = 1;
-        optional uint64 id = 2;
+        optional uint64 asset_id = 2;
     }
 
     /**
-     * Structure representing auth account
+     * Structure representing account authority
      */
     message DecentAuthorityAccount {
         optional DecentAccountId account = 1;
@@ -98,11 +96,10 @@ message DecentTxOperationAck {
     }
 
     /**
-     * Structure representing auth key
+     * Structure representing key authority
      */
     message DecentAuthorityKey {
-        optional bytes key = 1;        // Explicit public key bytes; when present, address_n must be empty
-        optional uint32 address_n = 2; // BIP-32 path to derive key; when filled out, key must not be present
+        optional bytes key = 1;        // Explicit public key bytes
         optional uint32 weight = 3;
     }
 
@@ -116,42 +113,63 @@ message DecentTxOperationAck {
     }
 
     /**
-     * Structure representing transfer data structure
+     * Structure representing memo
+     */
+    message DecentMemo {
+        optional bytes sender_pub_key = 1;
+        optional bytes receiver_pub_key = 2;
+        optional uint64 nonce = 3;
+        optional bytes message = 4;
+    }
+
+    /**
+     * Structure representing transfer operation
      */
     message DecentOperationTransfer {
-        optional string sender = 1; // Asset sender
-        optional string receiver = 2;
-        optional DecentAsset quantity = 3;
-        optional string memo = 4;
+        optional DecentAsset fee = 1;
+        optional DecentAccountId sender = 2;
+        optional DecentObjectId receiver = 3;
+        optional DecentAsset amount = 4;
+        optional DecentMemo memo = 5;  // optional message memo
     }
 
     /**
-     * Structure representing update authorization.
+     * Structure representing account options
      */
-    message DecentOperationUpdateAccount {
-        optional string account = 1;
-        optional uint64 permission = 2;
-        optional uint64 parent = 3;
-        optional DecentAuthority auth = 4;
+    message DecentAccountOptions {
+        optional bytes memo_key = 1;
+        optional DecentAccountId voting_account = 2;
+        optional uint32 num_miner = 3;
+        repeated uint32 votes = 4;
+        optional bool allow_subscription = 5;
+        optional DecentAsset price_per_subscribe = 6;
+        optional uint32 subscription_period = 7;
     }
 
     /**
-     * Structure representing creation of a new account.
+     * Structure representing account create operation.
      */
-    message DecentOperationCreateAccount {
-        optional uint64 creator = 1;
-        optional uint64 name = 2;
+    message DecentOperationAccountCreate {
+        optional DecentAsset fee = 1;
+        optional DecentAccountId registrar = 2;
+        optional string name = 3;
+        optional DecentAuthority owner = 4;
+        optional DecentAuthority active = 5;
+        optional DecentAccountOptions options = 6;
+
+    }
+
+    /**
+     * Structure representing account update operation.
+     */
+    message DecentOperationAccountUpdate {
+        optional DecentAsset fee = 1;
+        optional DecentAccountId account = 2;
         optional DecentAuthority owner = 3;
         optional DecentAuthority active = 4;
+        optional DecentAccountOptions new_options = 5;
     }
 
-    /**
-     * Structure representing actions not implemented above.
-     */
-    message DecentOperationUnknown {
-        optional uint32 data_size = 1;
-        optional bytes data_chunk = 2;
-    }
 }
 
 /**
