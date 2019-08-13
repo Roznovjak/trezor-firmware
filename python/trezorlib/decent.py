@@ -21,7 +21,9 @@ def parse_object_id(object_num: str):
 
 
 def parse_asset(asset):
-    return messages.DecentAsset(amount=int(asset["amount"]), asset_id=parse_id(asset["asset_id"]))
+    return messages.DecentAsset(
+        amount=int(asset["amount"]), asset_id=parse_id(asset["asset_id"])
+    )
 
 
 def public_key_to_buffer(pub_key):
@@ -52,8 +54,7 @@ def parse_authority(data):
         account, weight = item
         accounts.append(
             messages.DecentAuthorityAccount(
-                account=messages.DecentAccountId(parse_id(account)),
-                weight=int(weight)
+                account=messages.DecentAccountId(parse_id(account)), weight=int(weight)
             )
         )
 
@@ -62,12 +63,13 @@ def parse_authority(data):
         key, weight = item
         keys.append(
             messages.DecentAuthorityKey(
-                key=public_key_to_buffer(key),
-                weight=int(weight)
+                key=public_key_to_buffer(key), weight=int(weight)
             )
         )
 
-    return messages.DecentAuthority(threshold=int(data["weight_threshold"]), accounts=accounts, keys=keys)
+    return messages.DecentAuthority(
+        threshold=int(data["weight_threshold"]), accounts=accounts, keys=keys
+    )
 
 
 def parse_vote(vote: str):
@@ -86,13 +88,15 @@ def parse_account_options(data):
     price_per_subscribe = parse_asset(data["price_per_subscribe"])
     subscription_period = int(data["subscription_period"])
 
-    return messages.DecentAccountOptions(memo,
-                                         voting_account,
-                                         num_miner,
-                                         votes,
-                                         allow_subscription,
-                                         price_per_subscribe,
-                                         subscription_period)
+    return messages.DecentAccountOptions(
+        memo,
+        voting_account,
+        num_miner,
+        votes,
+        allow_subscription,
+        price_per_subscribe,
+        subscription_period,
+    )
 
 
 def parse_account_create(data):
@@ -103,7 +107,9 @@ def parse_account_create(data):
     active = parse_authority(data["active"])
     options = parse_account_options(data["options"])
 
-    return messages.DecentOperationAccountCreate(fee, registrar, name, owner, active, options)
+    return messages.DecentOperationAccountCreate(
+        fee, registrar, name, owner, active, options
+    )
 
 
 def parse_account_update(data):
@@ -121,7 +127,9 @@ def parse_account_update(data):
     if data.get("new_options"):
         new_options = parse_account_options(data["new_options"])
 
-    return messages.DecentOperationAccountUpdate(fee, account, owner, active, new_options)
+    return messages.DecentOperationAccountUpdate(
+        fee, account, owner, active, new_options
+    )
 
 
 def parse_operation(operation):
@@ -148,8 +156,8 @@ def parse_transaction_json(transaction):
     header.ref_block_prefix = int(transaction["ref_block_prefix"])
     header.expiration = int(
         (
-                datetime.strptime(transaction["expiration"], "%Y-%m-%dT%H:%M:%S")
-                - datetime(1970, 1, 1)
+            datetime.strptime(transaction["expiration"], "%Y-%m-%dT%H:%M:%S")
+            - datetime(1970, 1, 1)
         ).total_seconds()
     )
 

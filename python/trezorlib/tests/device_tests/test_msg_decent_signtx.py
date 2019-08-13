@@ -55,27 +55,21 @@ class TestMsgDecentSignTx(TrezorTest):
                 [
                     39,
                     {
-                        "fee": {
-                            "amount": 100000,
-                            "asset_id": "1.3.0"
-                        },
+                        "fee": {"amount": 100000, "asset_id": "1.3.0"},
                         "from": "1.2.38",
                         "to": "1.2.39",
-                        "amount": {
-                            "amount": 100000000,
-                            "asset_id": "1.3.0"
-                        },
+                        "amount": {"amount": 100000000, "asset_id": "1.3.0"},
                         "memo": {
                             "from": "DCT7qd59RnZtJC7d6cFvXYnFmdjtBJkg2DxizoSYVcJgexvUk9GFA",
                             "to": "DCT6kiy7aHbjNwxeFmkVN8r1KyCgNxaAXYr9uaEPHmvwuZNuhnodJ",
                             "nonce": "16718924664158993304",
-                            "message": "eddb46c6feecdad252eaef73be98e8e0"
+                            "message": "eddb46c6feecdad252eaef73be98e8e0",
                         },
-                        "extensions": []
-                    }
+                        "extensions": [],
+                    },
                 ]
             ],
-            "extensions": []
+            "extensions": [],
         }
 
         with self.client:
@@ -97,10 +91,7 @@ class TestMsgDecentSignTx(TrezorTest):
                 [
                     1,
                     {
-                        "fee": {
-                            "amount": 100000,
-                            "asset_id": "1.3.0"
-                        },
+                        "fee": {"amount": 100000, "asset_id": "1.3.0"},
                         "registrar": "1.2.38",
                         "name": "new-account",
                         "owner": {
@@ -109,9 +100,9 @@ class TestMsgDecentSignTx(TrezorTest):
                             "key_auths": [
                                 [
                                     "DCT6kiy7aHbjNwxeFmkVN8r1KyCgNxaAXYr9uaEPHmvwuZNuhnodJ",
-                                    1
+                                    1,
                                 ]
-                            ]
+                            ],
                         },
                         "active": {
                             "weight_threshold": 1,
@@ -119,9 +110,9 @@ class TestMsgDecentSignTx(TrezorTest):
                             "key_auths": [
                                 [
                                     "DCT6kiy7aHbjNwxeFmkVN8r1KyCgNxaAXYr9uaEPHmvwuZNuhnodJ",
-                                    1
+                                    1,
                                 ]
-                            ]
+                            ],
                         },
                         "options": {
                             "memo_key": "DCT6kiy7aHbjNwxeFmkVN8r1KyCgNxaAXYr9uaEPHmvwuZNuhnodJ",
@@ -130,17 +121,14 @@ class TestMsgDecentSignTx(TrezorTest):
                             "votes": [],
                             "extensions": [],
                             "allow_subscription": False,
-                            "price_per_subscribe": {
-                                "amount": 0,
-                                "asset_id": "1.3.0"
-                            },
-                            "subscription_period": 0
+                            "price_per_subscribe": {"amount": 0, "asset_id": "1.3.0"},
+                            "subscription_period": 0,
                         },
-                        "extensions": {}
-                    }
+                        "extensions": {},
+                    },
                 ]
             ],
-            "extensions": []
+            "extensions": [],
         }
 
         with self.client:
@@ -160,11 +148,9 @@ class TestMsgDecentSignTx(TrezorTest):
             "expiration": "2019-07-11T12:30:50",
             "operations": [
                 [
-                    2, {
-                        "fee": {
-                            "amount": 100000,
-                            "asset_id": "1.3.0"
-                        },
+                    2,
+                    {
+                        "fee": {"amount": 100000, "asset_id": "1.3.0"},
                         "account": "1.2.38",
                         "active": {
                             "weight_threshold": 1,
@@ -172,30 +158,28 @@ class TestMsgDecentSignTx(TrezorTest):
                             "key_auths": [
                                 [
                                     "DCT6kiy7aHbjNwxeFmkVN8r1KyCgNxaAXYr9uaEPHmvwuZNuhnodJ",
-                                    1
+                                    1,
                                 ]
-                            ]
+                            ],
                         },
                         "new_options": {
                             "memo_key": "DCT6kiy7aHbjNwxeFmkVN8r1KyCgNxaAXYr9uaEPHmvwuZNuhnodJ",
                             "voting_account": "1.2.39",
                             "num_miner": 1,
-                            "votes": [
-                                "0:7"
-                            ],
+                            "votes": ["0:7"],
                             "extensions": [],
                             "allow_subscription": True,
                             "price_per_subscribe": {
                                 "amount": 10000,
-                                "asset_id": "1.3.1"
+                                "asset_id": "1.3.1",
                             },
-                            "subscription_period": 1
+                            "subscription_period": 1,
                         },
-                        "extensions": {}
-                    }
+                        "extensions": {},
+                    },
                 ]
             ],
-            "extensions": []
+            "extensions": [],
         }
 
         with self.client:
@@ -217,46 +201,28 @@ class TestMsgDecentSignTx(TrezorTest):
                 [
                     39,
                     {
-                        "fee": {
-                            "amount": 100000,
-                            "asset_id": "1.3.0"
-                        },
+                        "fee": {"amount": 100000, "asset_id": "1.3.0"},
                         "from": "1.2.38",
                         "to": "1.2.15",
-                        "amount": {
-                            "amount": "10000000000",
-                            "asset_id": "1.3.0"
-                        },
-                        "extensions": []
-                    }
+                        "amount": {"amount": "10000000000", "asset_id": "1.3.0"},
+                        "extensions": [],
+                    },
                 ],
                 [
                     1,
                     {
-                        "fee": {
-                            "amount": 100000,
-                            "asset_id": "1.3.0"
-                        },
+                        "fee": {"amount": 100000, "asset_id": "1.3.0"},
                         "registrar": "1.2.38",
                         "name": "new-account",
                         "owner": {
                             "weight_threshold": 2,
-                            "account_auths": [
-                                [
-                                    "1.2.15",
-                                    1
-                                ],
-                                [
-                                    "1.2.38",
-                                    2
-                                ]
-                            ],
+                            "account_auths": [["1.2.15", 1], ["1.2.38", 2]],
                             "key_auths": [
                                 [
                                     "DCT6kiy7aHbjNwxeFmkVN8r1KyCgNxaAXYr9uaEPHmvwuZNuhnodJ",
-                                    1
+                                    1,
                                 ]
-                            ]
+                            ],
                         },
                         "active": {
                             "weight_threshold": 1,
@@ -264,43 +230,34 @@ class TestMsgDecentSignTx(TrezorTest):
                             "key_auths": [
                                 [
                                     "DCT6kiy7aHbjNwxeFmkVN8r1KyCgNxaAXYr9uaEPHmvwuZNuhnodJ",
-                                    1
+                                    1,
                                 ],
                                 [
                                     "DCT7qd59RnZtJC7d6cFvXYnFmdjtBJkg2DxizoSYVcJgexvUk9GFA",
-                                    1
-                                ]
-                            ]
+                                    1,
+                                ],
+                            ],
                         },
                         "options": {
                             "memo_key": "DCT6kiy7aHbjNwxeFmkVN8r1KyCgNxaAXYr9uaEPHmvwuZNuhnodJ",
                             "voting_account": "1.2.3",
                             "num_miner": 5,
-                            "votes": [
-                                "0:1",
-                                "0:2",
-                                "0:3",
-                                "0:4",
-                                "0:5"
-                            ],
+                            "votes": ["0:1", "0:2", "0:3", "0:4", "0:5"],
                             "extensions": [],
                             "allow_subscription": True,
                             "price_per_subscribe": {
                                 "amount": "100000000000",
-                                "asset_id": "1.3.0"
+                                "asset_id": "1.3.0",
                             },
-                            "subscription_period": 7
+                            "subscription_period": 7,
                         },
-                        "extensions": {}
-                    }
+                        "extensions": {},
+                    },
                 ],
                 [
                     2,
                     {
-                        "fee": {
-                            "amount": 100000,
-                            "asset_id": "1.3.0"
-                        },
+                        "fee": {"amount": 100000, "asset_id": "1.3.0"},
                         "account": "1.2.38",
                         "active": {
                             "weight_threshold": 1,
@@ -308,9 +265,9 @@ class TestMsgDecentSignTx(TrezorTest):
                             "key_auths": [
                                 [
                                     "DCT6kiy7aHbjNwxeFmkVN8r1KyCgNxaAXYr9uaEPHmvwuZNuhnodJ",
-                                    1
+                                    1,
                                 ]
-                            ]
+                            ],
                         },
                         "new_options": {
                             "memo_key": "DCT6kiy7aHbjNwxeFmkVN8r1KyCgNxaAXYr9uaEPHmvwuZNuhnodJ",
@@ -321,15 +278,15 @@ class TestMsgDecentSignTx(TrezorTest):
                             "allow_subscription": False,
                             "price_per_subscribe": {
                                 "amount": 10000,
-                                "asset_id": "1.3.1"
+                                "asset_id": "1.3.1",
                             },
-                            "subscription_period": 5
+                            "subscription_period": 5,
                         },
-                        "extensions": {}
-                    }
-                ]
+                        "extensions": {},
+                    },
+                ],
             ],
-            "extensions": []
+            "extensions": [],
         }
 
         def input_flow():

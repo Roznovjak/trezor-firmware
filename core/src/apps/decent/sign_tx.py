@@ -1,3 +1,5 @@
+from ubinascii import hexlify
+
 from trezor import wire
 from trezor.crypto.curve import secp256k1
 from trezor.crypto.hashlib import sha256
@@ -9,11 +11,9 @@ from trezor.utils import HashWriter
 
 from apps.common import paths
 from apps.decent import CURVE, writers
-from apps.decent.operations import process_operation
 from apps.decent.helpers import validate_full_path
 from apps.decent.layout import require_sign_tx
-
-from ubinascii import hexlify
+from apps.decent.operations import process_operation
 
 
 async def sign_tx(ctx, msg: DecentSignTx, keychain):
@@ -36,7 +36,7 @@ async def sign_tx(ctx, msg: DecentSignTx, keychain):
         node.private_key(), digest, True, secp256k1.CANONICAL_SIG_EOS
     )
 
-    return DecentSignedTx(signature=hexlify(signature).decode('ascii'))
+    return DecentSignedTx(signature=hexlify(signature).decode("ascii"))
 
 
 async def _init(ctx, sha, msg):

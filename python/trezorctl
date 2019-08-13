@@ -1498,7 +1498,9 @@ def decent_sign_transaction(connect, address, file):
     tx_json = json.load(file)
 
     address_n = tools.parse_path(address)
-    return decent.sign_tx(client, address_n, tx_json["transaction"], tx_json["chain_id"])
+    return decent.sign_tx(
+        client, address_n, tx_json["transaction"], tx_json["chain_id"]
+    )
 
 
 #

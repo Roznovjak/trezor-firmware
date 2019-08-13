@@ -1,9 +1,4 @@
-from micropython import const
 from trezor.messages.MessageType import DecentTxOperationAck
-
-DECENT_OP_ID_TRANSFER = const(39)
-DECENT_OP_ID_ACCOUNT_CREATE = const(1)
-DECENT_OP_ID_ACCOUNT_UPDATE = const(2)
 
 from apps.decent import writers
 from apps.decent.operations import layout
@@ -15,13 +10,13 @@ async def process_operation(ctx, sha, operation: DecentTxOperationAck):
         raise ValueError("Invalid action")
 
     w = bytearray()
-    if operation.operation_id == DECENT_OP_ID_TRANSFER:
+    if operation.operation_id == writers.DECENT_OP_ID_TRANSFER:
         await layout.confirm_operation_transfer(ctx, operation.transfer)
         writers.write_operation_transfer(w, operation.transfer)
-    elif operation.operation_id == DECENT_OP_ID_ACCOUNT_CREATE:
+    elif operation.operation_id == writers.DECENT_OP_ID_ACCOUNT_CREATE:
         await layout.confirm_operation_account_create(ctx, operation.account_create)
         writers.write_operation_account_create(w, operation.account_create)
-    elif operation.operation_id == DECENT_OP_ID_ACCOUNT_UPDATE:
+    elif operation.operation_id == writers.DECENT_OP_ID_ACCOUNT_UPDATE:
         await layout.confirm_operation_account_update(ctx, operation.account_update)
         writers.write_operation_account_update(w, operation.account_update)
     else:
@@ -32,9 +27,18 @@ async def process_operation(ctx, sha, operation: DecentTxOperationAck):
 
 def check_operation(operation: DecentTxOperationAck):
     if (
-        (operation.operation_id == DECENT_OP_ID_TRANSFER and operation.transfer is not None)
-        or (operation.operation_id == DECENT_OP_ID_ACCOUNT_CREATE and operation.account_create is not None)
-        or (operation.operation_id == DECENT_OP_ID_ACCOUNT_UPDATE and operation.account_update is not None)
+        (
+            operation.operation_id == writers.DECENT_OP_ID_TRANSFER
+            and operation.transfer is not None
+        )
+        or (
+            operation.operation_id == writers.DECENT_OP_ID_ACCOUNT_CREATE
+            and operation.account_create is not None
+        )
+        or (
+            operation.operation_id == writers.DECENT_OP_ID_ACCOUNT_UPDATE
+            and operation.account_update is not None
+        )
     ):
         return True
     else:

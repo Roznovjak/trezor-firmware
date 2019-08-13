@@ -1,10 +1,10 @@
 from common import *
 
-from apps.decent.operations import (check_operation,
-                                    DECENT_OP_ID_TRANSFER,
-                                    DECENT_OP_ID_ACCOUNT_CREATE,
-                                    DECENT_OP_ID_ACCOUNT_UPDATE
-)
+from apps.decent.writers import (DECENT_OP_ID_ACCOUNT_CREATE,
+                                 DECENT_OP_ID_ACCOUNT_UPDATE,
+                                 DECENT_OP_ID_TRANSFER,
+                                 )
+from apps.decent.operations import check_operation
 from trezor.messages.DecentTxOperationAck import DecentTxOperationAck
 from trezor.messages.DecentOperationTransfer import DecentOperationTransfer
 from trezor.messages.DecentOperationAccountCreate import DecentOperationAccountCreate

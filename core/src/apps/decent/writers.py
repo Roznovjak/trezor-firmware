@@ -1,12 +1,14 @@
+from micropython import const
+
 from trezor.messages import (
-    DecentOperationTransfer,
+    DecentAccountOptions,
+    DecentAsset,
+    DecentAuthority,
+    DecentMemo,
     DecentOperationAccountCreate,
     DecentOperationAccountUpdate,
-    DecentAsset,
+    DecentOperationTransfer,
     DecentTxHeader,
-    DecentMemo,
-    DecentAuthority,
-    DecentAccountOptions,
 )
 from trezor.utils import HashWriter
 
@@ -18,11 +20,9 @@ from apps.common.writers import (
     write_uint64_le,
 )
 
-from apps.decent.operations import (
-    DECENT_OP_ID_TRANSFER,
-    DECENT_OP_ID_ACCOUNT_CREATE,
-    DECENT_OP_ID_ACCOUNT_UPDATE,
-)
+DECENT_OP_ID_ACCOUNT_CREATE = const(1)
+DECENT_OP_ID_ACCOUNT_UPDATE = const(2)
+DECENT_OP_ID_TRANSFER = const(39)
 
 
 def write_variant32(w: bytearray, value: int) -> int:

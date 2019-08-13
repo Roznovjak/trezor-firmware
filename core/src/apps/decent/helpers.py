@@ -9,14 +9,14 @@ def base58_encode(prefix: str, data: bytes) -> str:
     return prefix + b58
 
 
-def account_id_to_string(id) -> str:
-    return "1.2." + str(id)
+def account_id_to_string(id_) -> str:
+    return "1.2." + str(id_)
 
 
-def object_id_to_string(id: DecentObjectId) -> str:
-    object_space = id.id >> 56
-    object_type = id.id >> 48 & 0x00ff
-    object_id = id.id & 0xffffffffffff
+def object_id_to_string(id_: DecentObjectId) -> str:
+    object_space = id_.id >> 56
+    object_type = id_.id >> 48 & 0x00FF
+    object_id = id_.id & 0xFFFFFFFFFFFF
     return ".".join([str(object_space), str(object_type), str(object_id)])
 
 
@@ -25,7 +25,7 @@ def asset_id_to_string(asset_id) -> str:
 
 
 def vote_id_to_string(vote_id) -> str:
-    vote_type = vote_id & 0xff
+    vote_type = vote_id & 0xFF
     vote_instance = vote_id >> 8
     return str(vote_type) + ":" + str(vote_instance)
 

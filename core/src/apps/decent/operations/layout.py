@@ -4,9 +4,9 @@ from ubinascii import hexlify
 from trezor import ui, wire
 from trezor.messages import (
     ButtonRequestType,
-    DecentOperationTransfer,
     DecentOperationAccountCreate,
     DecentOperationAccountUpdate,
+    DecentOperationTransfer,
     MessageType,
 )
 from trezor.messages.ButtonRequest import ButtonRequest
@@ -46,7 +46,7 @@ async def confirm_operation_transfer(ctx, msg: DecentOperationTransfer):
 
     if msg.memo:
         fields.append("Memo:")
-        fields += split_data(hexlify(msg.memo.message[:512]).decode('ascii'))
+        fields += split_data(hexlify(msg.memo.message[:512]).decode("ascii"))
 
     pages = list(chunks(fields, _FOUR_FIELDS_PER_PAGE))
 
